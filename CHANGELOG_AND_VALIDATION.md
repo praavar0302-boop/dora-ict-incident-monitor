@@ -1,4 +1,20 @@
-# Changes and validation — 19 November 2026
+# Refinement validation — 19 November 2026
+
+Baseline commit: `5b3d189`; 37 tests passed before edits. After refinement: **47 tests passed** on Python 3.12.13 (`python -m pytest -q`), including all existing regulatory/data tests and additional search, combined-filter, sorting, full CSV round-trip, empty-export and UI checks. `rules.py`, `prepare_data.py`, scenario JSON and deployment incident CSV are unchanged.
+
+The notebook was reduced from 26 cells to 11 cells (five executable cells), then executed sequentially in a fresh Python kernel with the original source supplied through `DORA_SOURCE_CSV`. Newly executed outputs verify 141,712 events / 36 columns → 24,918 unique incidents and an exact dataframe comparison with committed deployment data. Missing resolution durations: 1,556; valid: 23,362; median: 22.1 hours; mean: 178.171582 hours; SLA met: 15,803 / 24,918 (63.4200177%). Automatic first-download code is documented and hash-checked; this execution used the existing verified source, not the download branch.
+
+Changed: analysis notebook, app layout, README, this validation record, development dependencies, ignore rules and UI tests. Added: `operations.py` (shared filtering/export helpers), its tests, and `.streamlit/config.toml` (restrained theme). Removed: unused `data/dora_scenarios.csv` (JSON is authoritative), and transient `test_results.xml` (historical evidence retained below). No app-generation cells or embedded copies of repository Python files remain in the notebook. No production dependency was added.
+
+UI verification before publication: all three tabs render; literal incident-ID search updates KPIs/charts to one record; CSV control clicked; results appear above collapsed assessment inputs; reference data quality is a readable table. Automated CSV tests compare exported bytes with every filtered row and selected ordering. Browser download filesystem contents were not independently inspected. Automated tests cover all five scenario results, input validation, deadline calculations, combined filters and empty states.
+
+Limits retained: educational screening, no official classification, no automatic recurrence aggregation, reporting submissions, persistence, holiday/entity overrides or local-time/DST automation. This work does not constitute a security audit or legal validation. Historical deployment evidence below is dated evidence, not a new claim for changed UI.
+
+---
+
+## Original MVP validation record
+
+### Changes and validation — 19 November 2026
 
 ## Changes
 
@@ -17,7 +33,7 @@
 
 ## Executed validation
 
-Python 3.12.13, Streamlit 1.50.0, pandas 2.3.3, Plotly 7.1.0, pytest 8.4.2. Command: `python -m pytest -q`. **37 tests passed**, no pytest warnings (see `test_results.xml`).
+Python 3.12.13, Streamlit 1.50.0, pandas 2.3.3, Plotly 7.1.0, pytest 8.4.2. Command: `python -m pytest -q`. **37 tests passed**, no pytest warnings. This is the pre-refinement baseline; the transient XML has been removed in favour of this retained record and reproducible tests.
 
 Coverage includes each material threshold at and above the boundary; grouped category counting; criticality gate alternatives; special access versus adverse-data path; unknowns; zero denominators; negative/NaN/infinite values; inconsistent affected-client counts; all five scenarios; early/late/exact-24h reporting clocks; 72h origin; leap-year/month-end final deadlines; explicit timezone and chronology validation; whole-row selection; numeric 9-to-10 revision ordering with conflicting timestamps; placeholder/blank/boolean handling; missing/invalid/negative resolution times; tied snapshots; latest-ID integrity; Streamlit initial rendering, all scenarios, resets, SLA filters, empty results, invalid screening inputs and reporting-helper interactions.
 

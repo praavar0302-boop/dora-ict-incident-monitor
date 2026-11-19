@@ -63,7 +63,7 @@ python -m pytest -q
 
 The public event data has 141,712 records / 36 columns and 24,918 incident IDs. The generated incident data has one row per ID. All latest records in this historical sample are Closed; that is not a claim about live operations. There are 1,556 missing usable resolution durations. Detailed values are in `data/data_quality.json`.
 
-The original five fictional scenarios are retained. JSON supplies the screening fields; the original CSV is kept for reference. Additional unprovided facts remain unknown. The original critical-service flag is explicitly interpreted as ICT supporting a critical/important function for these fictional examples. Global impact does not establish an EU Member State count. SCN-01/03/05 indicate major; SCN-02/04 require review with the available facts.
+The five fictional scenarios are maintained in `data/dora_scenarios.json`. Additional unprovided facts remain unknown. The original critical-service flag is explicitly interpreted as ICT supporting a critical/important function for these fictional examples. Global impact does not establish an EU Member State count. SCN-01/03/05 indicate major; SCN-02/04 require review with the available facts.
 
 ## Scope limits
 
@@ -86,3 +86,13 @@ The original five fictional scenarios are retained. JSON supplies the screening 
 - [Delegated Regulation (EU) 2024/1772](https://eur-lex.europa.eu/eli/reg_del/2024/1772/oj/eng), Arts. 1–9.
 - [Delegated Regulation (EU) 2025/301](https://eur-lex.europa.eu/eli/reg_del/2025/301/oj/eng), Art. 5.
 - [Implementing Regulation (EU) 2025/302](https://eur-lex.europa.eu/eli/reg_impl/2025/302/oj/eng), official forms/procedures, outside MVP implementation.
+
+## Notebook workflow
+
+`DORA_Incident_Monitor.ipynb` is a sequential analysis notebook, not an application generator. Install `requirements-dev.txt` and start Jupyter from this repository root. It obtains the original UCI ZIP automatically, verifies the validated SHA-256, calls `prepare_data.prepare`, compares the result with the committed deployment CSV, and calculates operational metrics. For offline execution set `DORA_SOURCE_CSV=/absolute/path/incident_event_log.csv`. Downloaded raw data is ignored by Git. No active Colab runtime is needed. Notebook outputs are from a fresh ordered execution; rerun them when the source or processing changes.
+
+## Dashboard use
+
+All operational KPIs, charts and directory rows use the same state, priority, SLA and literal incident-ID search filters. Median resolution time is the primary timing metric; mean and known/missing denominators remain visible. Resolution data coverage replaces the redundant closed count. Directory controls sort all matching records; the explicit CSV download exports the complete filtered set in that order. The table's own interactive sorting affects its view only.
+
+Scenario results and criteria appear above the expandable assessment inputs. Guidance and unadjusted deadline calculations are in separate expanders. Reference data quality is presented as a summary table. No classification or reporting logic was changed in this refinement.

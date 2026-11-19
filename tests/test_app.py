@@ -10,9 +10,11 @@ def test_default_and_all_scenarios():
     assert not at.exception
     assert at.metric[0].value=='24,918'
     scenario=find(at.selectbox,'Load a simulated ICT scenario')
-    for name in scenario.options[1:]:
+    expected=['Major indicated','Needs review','Major indicated','Needs review','Major indicated']
+    for name,status in zip(scenario.options[1:],expected):
         find(at.selectbox,'Load a simulated ICT scenario').select(name).run(timeout=30)
         assert not at.exception
+        assert any(x.value==status for x in (at.error if status=='Major indicated' else at.warning))
     find(at.selectbox,'Load a simulated ICT scenario').select('Core Retail Payment System Outage').run(timeout=30)
     assert at.error[0].value=='Major indicated'
     find(at.selectbox,'Load a simulated ICT scenario').select('Customer Facing Authentication Service Outage').run(timeout=30)
@@ -34,17 +36,17 @@ def test_empty_filter_and_sla():
 
 def test_deadline_inputs():
     at=AppTest.from_file(str(APP)).run(timeout=60)
-    at.text_input[0].set_value('2026-11-19T00:00:00Z')
-    at.text_input[1].set_value('2026-11-19T01:00:00Z').run(timeout=30)
+    at.text_input[1].set_value('2026-11-19T00:00:00Z')
+    at.text_input[2].set_value('2026-11-19T01:00:00Z').run(timeout=30)
     assert not at.exception
     assert any('2026-11-19T05:00:00+00:00' in x.value for x in at.markdown)
-    at.text_input[1].set_value('invalid').run(timeout=30)
+    at.text_input[2].set_value('invalid').run(timeout=30)
     assert not at.exception and any('Invalid timestamp' in e.value for e in at.error)
 
 def test_empty_dataset_filter_path(tmp_path):
     import shutil
     import pandas as pd
-    for f in ['app.py','rules.py','prepare_data.py']:
+    for f in ['app.py','rules.py','prepare_data.py','operations.py']:
         shutil.copy(APP.parent/f,tmp_path/f)
     shutil.copytree(APP.parent/'data',tmp_path/'data')
     data=pd.read_csv(tmp_path/'data/incidents.csv',low_memory=False).head(2).copy()
@@ -66,3 +68,15 @@ def test_scenario_reset_and_invalid_input():
     assert find(at.number_input,NUM_FIELDS['member_states']).value==1
     find(at.number_input,NUM_FIELDS['member_states']).set_value(28).run(timeout=30)
     assert not at.exception and any('Invalid screening input' in x.value for x in at.error)
+
+def test_search_updates_kpis_charts_and_directory():
+    at=AppTest.from_file(str(APP)).run(timeout=60)
+    assert len(at.tabs)==3 and len(at.get("download_button"))==1
+    assert at.metric[1].value=='22.1 Hours' and at.metric[2].value=='93.8%'
+    find(at.text_input,'Search incident ID').set_value('INC0000045').run(timeout=30)
+    assert not at.exception and at.metric[0].value=='1'
+    assert at.dataframe[0].value.number.tolist()==['INC0000045']
+    find(at.text_input,'Search incident ID').set_value('no-such-incident').run(timeout=30)
+    assert not at.exception and at.metric[0].value=='0'
+    assert all(m.value=='N/A' for m in at.metric[1:])
+    assert at.dataframe[0].value.empty
