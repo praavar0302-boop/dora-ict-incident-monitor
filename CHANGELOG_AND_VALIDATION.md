@@ -67,3 +67,7 @@ Original notebook app.py, scenarios and processed-file existence were inspected 
 - Full exploratory Colab Run all has not been rerun during local validation. The rewritten generator and tests are self-contained for the runtime, but cloud/Colab execution is a separate check.
 
 Official legal sources and implementation scope are linked in README.md and the app's Reference Guide.
+
+## Refinement deployment check
+
+After publishing refinement commit `4c95adc`, the existing public URL loaded the updated interface without a new deployment: https://dora-ict-incident-monitor.streamlit.app/. All three tabs were opened successfully. The operations view showed 24,918 incidents, median 22.1 hours, coverage 93.8%, mean 178.2 hours and SLA 63.4%; the payment scenario refreshed to Major indicated above the collapsed inputs; Reference Guide showed the readable data-quality summary. No application exception was visible. All five scenarios and reporting clocks passed automated tests; this post-update browser check was a focused smoke test, not a repeat of every automated boundary test.
