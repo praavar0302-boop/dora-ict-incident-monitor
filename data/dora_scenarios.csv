@@ -1,0 +1,6 @@
+scenario_id,name,system_affected,description,critical_service_affected,downtime_minutes,clients_affected,transactions_impacted,unauthorized_access,geographic_impact,estimated_economic_loss_eur
+SCN-01,Core Retail Payment System Outage,Instant SEPA Payment Engine,Database lock failure during high-volume processing leads to transaction timeouts for mobile banking users.,Yes,145,120000,45000,No,"Cross-border (DE, FR, NL)",850000
+SCN-02,Tier-1 Cloud Provider Availability Disruption,Sovereign Credit Risk Calculators,Regional network routing configuration error on hosting provider disrupts portfolio risk modeling tools.,No,310,450,0,No,Single Member State (IE),20000
+SCN-03,Unauthorized High-Net-Worth Client Directory Access,Wealth Management CRM Portal,"API vulnerability exploited, exposing profiles and contact lists of premium wealth customers to an external IP.",Yes,0,1200,0,Yes,Global (EU & US),350000
+SCN-04,Customer Facing Authentication Service Outage,Multi-Factor Authentication (MFA) Server,Certificate expiration on authentication gateways prevents client logins to web-trading dashboards.,Yes,85,65000,11000,No,Single Member State (IT),120000
+SCN-05,SWIFT Connectivity Gateway Timeout,SWIFT Alliance Gateway,"Corrupted message payload hangs queuing thread, delaying end-of-day international treasury settlements.",Yes,190,85,240,No,Cross-border (Global),1950000
