@@ -1,5 +1,11 @@
 # DORA-Informed ICT Incident Monitor
 
+**Live app:** https://dora-ict-incident-monitor.streamlit.app/
+
+Public deployment verified on 19 November 2026 in Chrome Incognito without authentication. All three tabs loaded; the five fictional scenarios returned the expected results (SCN-01/03/05: Major indicated; SCN-02/04: Needs review). The operational dashboard showed 24,918 incidents, 178.2-hour mean resolution and 63.4% SLA-met rate, matching the prepared data. The public data-quality audit showed the expected source SHA-256 and 1,556 missing resolution durations. No application exception or visible credentials/private incident information was observed during these checks. This was a functional and visible-exposure check, not a penetration test or legal-compliance assessment.
+
+Cloud runtime: Python 3.12.16, Streamlit 1.50.0. The hosting platform automatically replaced PyArrow 26.0.1 with 24.0.0 during provisioning. No application-code changes were needed for deployment.
+
 Educational portfolio MVP with three tabs: historical operations dashboard, single-incident screening and reference guide. **Not a claim or certification of DORA compliance.** No authority submissions, live monitoring, saved case management or scheduled alerts.
 
 ## Run
